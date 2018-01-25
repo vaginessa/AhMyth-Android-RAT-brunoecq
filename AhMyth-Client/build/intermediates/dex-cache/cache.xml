@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\bechevarria\.gradle\caches\modules-2\files-2.1\io.socket\engine.io-client\0.8.3\854b49396e1e9f9bb0ab025062ddb49c4ed65ca1\engine.io-client-0.8.3.jar"
+        jumboMode="false"
+        min-sdk-version="10"
+        optimize="true"
+        revision="26.0.2"
+        sha1="854b49396e1e9f9bb0ab025062ddb49c4ed65ca1">
+        <dex dex="C:\Users\bechevarria\Desktop\AhMyth-Android-RAT-master\AhMyth-Android-RAT-master\AhMyth-Client\app\build\intermediates\transforms\preDex\release\2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\bechevarria\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.11.0\840897fcd7223a8143f1d9b6f69714e7be34fd50\okio-1.11.0.jar"
+        jumboMode="false"
+        min-sdk-version="10"
+        optimize="true"
+        revision="26.0.2"
+        sha1="840897fcd7223a8143f1d9b6f69714e7be34fd50">
+        <dex dex="C:\Users\bechevarria\Desktop\AhMyth-Android-RAT-master\AhMyth-Android-RAT-master\AhMyth-Client\app\build\intermediates\transforms\preDex\release\4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\bechevarria\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.5.0\4b0bb6bfbecbdd42b97ff400af342bfe7f32bc83\okhttp-3.5.0.jar"
+        jumboMode="false"
+        min-sdk-version="10"
+        optimize="true"
+        revision="26.0.2"
+        sha1="4b0bb6bfbecbdd42b97ff400af342bfe7f32bc83">
+        <dex dex="C:\Users\bechevarria\Desktop\AhMyth-Android-RAT-master\AhMyth-Android-RAT-master\AhMyth-Client\app\build\intermediates\transforms\preDex\release\3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\bechevarria\.gradle\caches\modules-2\files-2.1\io.socket\socket.io-client\0.8.3\b30500232ff0668a47c9f91f02e6935457a52fb5\socket.io-client-0.8.3.jar"
+        jumboMode="false"
+        min-sdk-version="10"
+        optimize="true"
+        revision="26.0.2"
+        sha1="b30500232ff0668a47c9f91f02e6935457a52fb5">
+        <dex dex="C:\Users\bechevarria\Desktop\AhMyth-Android-RAT-master\AhMyth-Android-RAT-master\AhMyth-Client\app\build\intermediates\transforms\preDex\release\1.jar" />
+    </item>
+
+</items>
