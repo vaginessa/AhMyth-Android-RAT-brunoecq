@@ -28,7 +28,8 @@
 }
 
 ::-webkit-scrollbar {
-    display: none;
+	/*Agregando el Scrollbar a todas las pantallas*/
+    /*display: none;*/
 }
 
 .h20 {

