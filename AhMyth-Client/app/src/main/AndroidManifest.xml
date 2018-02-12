@@ -36,7 +36,6 @@
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -55,14 +54,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".bootService"
-            android:exported="true" />
-
-        <receiver
-            android:name=".receiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
     </application>
 
 </manifest>

