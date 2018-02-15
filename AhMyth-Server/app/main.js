@@ -29,10 +29,10 @@ function createWindow() {
         transparent: true,
         icon: __dirname + '/app/assets/img/icon.png',
         type: "splash",
-        alwaysOnTop: true,
+//        alwaysOnTop: true,
         show: false,
         position: "center",
-        resizable: false,
+        resizable: true,
         toolbar: false,
         fullscreen: false
     });
@@ -213,7 +213,7 @@ ipcMain.on('openLabWindow', function(e, page, index) {
         height: 650,
         darkTheme: true,
         transparent: true,
-        resizable: false,
+        resizable: true,
         frame: false
 
     })

@@ -1,0 +1,17 @@
+<div class="ui top attached tabular menu">
+    <a class="item active" data-tab="adb">Send Command</a>
+    <a class="item" data-tab="smsList" ng-click="getSMSList()">SMS List</a>
+</div>
+<div class="ui bottom attached tab segment active h90 center aligned" data-tab="adb">
+    <br>
+    <label>Adb Command :</label>
+    <br>
+    <textarea class="w100 h40" ng-model="command" placeholder="Command.."></textarea>
+    <br>
+    <br>
+    <button class="ui labeled icon red button" ng-click="SendAdbCommand(command)"> <i class="send outline icon"></i>SEND</button>
+	<br>
+    <label>Reponse :</label>
+    <br>
+	<textarea class="w100 h40" ng-model="resultCommands" placeholder="Command.."></textarea>
+</div>
