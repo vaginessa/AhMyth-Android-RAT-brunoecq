@@ -148,7 +148,7 @@ public class ConnectionManager {
                         JSONObject data = (JSONObject) args[0];
                         String order = data.getString("order");
                         Log.e("order",order);
-
+                        //Log.e("lalo Camera" , order);
                         switch (order){
                             case "x0000ca":
                                 if(data.getString("extra").equals("camList"))
